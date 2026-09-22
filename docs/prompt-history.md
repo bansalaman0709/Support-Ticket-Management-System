@@ -67,3 +67,13 @@ Important AI prompts and decisions. SpecStory session files also live under `.sp
 **Decisions:** Vite + React + TypeScript (assignment allows React/Next.js or equivalent). API calls match `api-contract.md` exactly via `/api` proxy to backend. Status transition buttons offer only allowed next statuses from the state machine (backend remains enforcer).
 
 **Verification:** `npm test` — 11 passed; `npm run build` — success.
+
+## 2026-09-22 — Final review, AI review & release readiness (Step 7)
+
+**Prompt (summary):** Spec-driven final review of entire repo; create `docs/ai-review.md` with real AI mistakes; fix only genuine issues; run backend/frontend tests and builds; no new features.
+
+**Decisions / fixes:**
+
+- Documented 7 genuine AI mistakes in `docs/ai-review.md` (cascade null comment id; priority enum; PATCH vs POST status; inventing missing contracts; README-as-requirements; H2 runtime scope; unescaped LIKE wildcards).
+- Fixed: LIKE metacharacter escaping for keyword search; H2 Maven scope → `test`; unused `Size` import; dead `Ticket.addComment`; `MethodArgumentTypeMismatchException` → contract error JSON.
+- Did not invent features or expand scope.

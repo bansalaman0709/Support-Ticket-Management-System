@@ -43,7 +43,7 @@ public class TicketService {
             if (keyword.isBlank()) {
                 throw new BadRequestException("Query parameter 'q' must not be blank");
             }
-            keyword = keyword.trim();
+            keyword = escapeLikeMetacharacters(keyword.trim());
         }
 
         TicketStatus status = null;
@@ -148,5 +148,13 @@ public class TicketService {
             throw new BadRequestException("Value exceeds maximum length of " + maxLength);
         }
         return trimmed;
+    }
+
+    /** Escape LIKE wildcards so keyword search is literal substring match (data-model.md). */
+    static String escapeLikeMetacharacters(String keyword) {
+        return keyword
+                .replace("\\", "\\\\")
+                .replace("%", "\\%")
+                .replace("_", "\\_");
     }
 }

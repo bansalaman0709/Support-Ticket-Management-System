@@ -89,9 +89,4 @@ public class Ticket {
     public List<Comment> getComments() {
         return comments;
     }
-
-    public void addComment(Comment comment) {
-        comments.add(comment);
-        comment.setTicket(this);
-    }
 }

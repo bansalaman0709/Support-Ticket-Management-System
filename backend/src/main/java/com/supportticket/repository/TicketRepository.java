@@ -13,16 +13,16 @@ public interface TicketRepository extends JpaRepository<Ticket, Long> {
 
     @Query("""
             SELECT t FROM Ticket t
-            WHERE LOWER(t.title) LIKE LOWER(CONCAT('%', :keyword, '%'))
-               OR (t.description IS NOT NULL AND LOWER(t.description) LIKE LOWER(CONCAT('%', :keyword, '%')))
+            WHERE LOWER(t.title) LIKE LOWER(CONCAT('%', :keyword, '%')) ESCAPE '\\'
+               OR (t.description IS NOT NULL AND LOWER(t.description) LIKE LOWER(CONCAT('%', :keyword, '%')) ESCAPE '\\')
             """)
     List<Ticket> searchByKeyword(@Param("keyword") String keyword);
 
     @Query("""
             SELECT t FROM Ticket t
             WHERE t.status = :status
-              AND (LOWER(t.title) LIKE LOWER(CONCAT('%', :keyword, '%'))
-                   OR (t.description IS NOT NULL AND LOWER(t.description) LIKE LOWER(CONCAT('%', :keyword, '%'))))
+              AND (LOWER(t.title) LIKE LOWER(CONCAT('%', :keyword, '%')) ESCAPE '\\'
+                   OR (t.description IS NOT NULL AND LOWER(t.description) LIKE LOWER(CONCAT('%', :keyword, '%')) ESCAPE '\\'))
             """)
     List<Ticket> searchByKeywordAndStatus(
             @Param("keyword") String keyword,

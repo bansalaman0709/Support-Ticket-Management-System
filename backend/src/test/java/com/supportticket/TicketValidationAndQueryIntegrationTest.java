@@ -171,6 +171,30 @@ class TicketValidationAndQueryIntegrationTest {
     }
 
     @Test
+    void searchTreatsLikeMetacharactersAsLiteralSubstring() throws Exception {
+        mockMvc.perform(post("/api/tickets")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"title\":\"100% complete\",\"description\":\"under_score\"}"))
+                .andExpect(status().isCreated());
+        createTicket("Other ticket");
+
+        mockMvc.perform(get("/api/tickets").param("q", "100%"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$", hasSize(1)))
+                .andExpect(jsonPath("$[0].title", is("100% complete")));
+
+        mockMvc.perform(get("/api/tickets").param("q", "under_score"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$", hasSize(1)))
+                .andExpect(jsonPath("$[0].description", is("under_score")));
+
+        mockMvc.perform(get("/api/tickets").param("q", "%"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$", hasSize(1)))
+                .andExpect(jsonPath("$[0].title", is("100% complete")));
+    }
+
+    @Test
     void commentsAreReturnedInAscendingIdOrder() throws Exception {
         long id = createTicket("Comment order");
 
