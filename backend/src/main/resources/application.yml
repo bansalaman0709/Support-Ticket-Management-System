@@ -1,0 +1,19 @@
+spring:
+  application:
+    name: support-ticket-backend
+  datasource:
+    url: ${DB_URL:jdbc:postgresql://localhost:5432/support_tickets}
+    username: ${DB_USERNAME:postgres}
+    password: ${DB_PASSWORD:}
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    hibernate:
+      ddl-auto: update
+    open-in-view: false
+    properties:
+      hibernate:
+        jdbc:
+          time_zone: UTC
+
+server:
+  port: ${SERVER_PORT:8080}

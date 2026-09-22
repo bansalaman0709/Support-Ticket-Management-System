@@ -70,9 +70,8 @@ Also reject other non-allowed edges once the allowed set in `spec/state-machine.
 Requirement: validate input at the backend.
 
 - Tests must assert that **invalid input is rejected** by the backend.
-- Do **not** invent specific rules (lengths, regex, required-field matrix) as if they were assignment requirements.
-- Once validation rules are approved in a later spec (`data-model.md` / `api-contract.md`), map tests to those rules.
-- Until then, validation tests remain **blocked on clarification** for concrete cases beyond “validation exists and rejects bad input.”
+- Map validation tests to the approved rules in `spec/data-model.md` and `spec/api-contract.md` (required title, lengths, blank keyword, invalid status filter values, etc.).
+- Do **not** invent additional rules beyond those approved specs.
 
 ## Persistence testing
 
@@ -96,16 +95,18 @@ Do not treat as mandatory unless later approved:
 
 ## Dependencies / gaps
 
-- `spec/api-contract.md` is **missing** → concrete HTTP assertions (paths, codes, bodies) cannot be fixed yet; keep API tests aligned once that contract exists.
-- `spec/data-model.md` is **missing** → entity/field constraints for validation tests are incomplete.
-- `spec/architecture.md` is **missing** → deployment/test environment shape is not specified.
+Approved specs now exist:
 
-Until those exist, prioritize:
+- `spec/api-contract.md` — use for concrete HTTP assertions (paths, codes, bodies).
+- `spec/data-model.md` — use for entity/field validation test cases.
+- `spec/architecture.md` — PostgreSQL app runtime; H2 for tests; Maven + Spring Boot + JPA.
 
-1. State-machine integration tests (fully derivable from `state-machine.md` + requirements).
-2. Capability tests for create/list/details/update/comments/search/filter at whatever API surface is later contracted.
+Prioritize:
+
+1. State-machine integration tests (allowed edges + stated invalid examples + other non-allowed edges per exhaustive allowed table).
+2. Capability tests for create/list/details/update/comments/search/filter per `api-contract.md`.
 3. Persistence restart check.
-4. UI meaningful-error checks on required flows.
+4. UI meaningful-error checks on required flows (frontend step).
 
 ## Consistency
 

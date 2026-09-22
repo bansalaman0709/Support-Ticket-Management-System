@@ -70,17 +70,22 @@ Invalid examples **explicitly stated** in the assignment (must be rejected):
 3. Valid transitions must succeed (acceptance: “Valid status transitions work”).
 4. State-machine **integration tests** must cover allowed and rejected behavior (see `spec/test-strategy.md`).
 
-## Explicitly not specified (do not invent)
+## Approved clarifications (see also data-model / api-contract)
 
-Documented here so implementers do not fill gaps silently:
+Previously unspecified items **approved** for implementation:
 
-- **Initial status** on ticket create (not stated).
-- Whether status change is a dedicated operation or part of a general ticket update (assignment names updateable fields as title, description, priority, assignee — **not** status — while still requiring valid transitions to work).
-- Whether skip transitions (e.g. `OPEN` → `RESOLVED`) are allowed: they are **not** listed as allowed edges; treat as **not allowed** only if the product owner confirms that “only listed arrows” is the full set (see Clarifications).
-- Behavior of self-transitions (e.g. `OPEN` → `OPEN`).
-- Whether `CLOSED` and `CANCELLED` are terminal for **all** targets (only reopen-to-`OPEN` examples are given).
-- Whether field updates (title/description/priority/assignee) or comments are allowed while status is `CLOSED` or `CANCELLED`.
-- HTTP status codes / error body shape for rejected transitions (deferred to `spec/api-contract.md`, which is currently missing).
+| Topic | Approved decision | Spec |
+|-------|-------------------|------|
+| Initial status on create | Always `OPEN` | `data-model.md` |
+| How status is changed | Dedicated `POST /api/tickets/{id}/status` (not via field PATCH) | `api-contract.md` |
+| Skip / non-listed / self-transitions | **Rejected** — only the allowed edges table above | this file + `api-contract.md` |
+| `CLOSED` / `CANCELLED` as sources | Only listed edges allowed; no reopen except if an edge exists (none do) | this file |
+| Field updates / comments when terminal | **Allowed** in any status | `data-model.md` |
+| HTTP codes / error body for rejects | `409` + error shape in API contract | `api-contract.md` |
+
+## Still not specified (do not invent further)
+
+- UI chrome for status change (see `ui-flow.md`); backend contract is defined.
 
 ## Consistency notes
 

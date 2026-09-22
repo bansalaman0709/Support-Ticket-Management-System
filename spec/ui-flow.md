@@ -18,6 +18,7 @@ Frontend stack constraint (assignment): **React/Next.js or equivalent** — choi
 | U6 | Search tickets by keyword | Search works |
 | U7 | Filter tickets by status | Status filter works |
 | U8 | Show meaningful errors | UI shows meaningful errors |
+| U9 | Change ticket status | Valid status transitions work; invalid rejected by backend |
 
 ## Flows
 
@@ -89,20 +90,23 @@ Requirements:
 
 Functional requirement #4 names updateable fields as title, description, priority, assignee — **not** status.
 
-**Conflict / gap (do not resolve silently):** There is no explicit functional requirement for a “change status” UI control, yet acceptance requires valid transitions to work. Clarification is required before inventing a status-change screen or assuming status is edited via U4.
+**Approved resolution:** Status is changed via a dedicated API (`POST /api/tickets/{id}/status` in `spec/api-contract.md`), not via U4 field update.
 
-Until clarified, this UI-flow doc does **not** add a dedicated status-transition flow as a required screen; it only requires that:
+### U9 — Change status (approved)
 
-- If/when the product exposes a way to request a status change, invalid transitions must surface meaningful errors (U8), and valid ones must succeed per acceptance.
-- Filter-by-status (U7) remains required and uses the five status names.
+1. User is on ticket details (or equivalent).
+2. User requests a new status using only values from `spec/state-machine.md`.
+3. On success: status updates and is reflected in details/list/filter.
+4. On invalid transition or other failure: UI displays a meaningful error (U8).
+
+Filter-by-status (U7) remains required and uses the five status names.
 
 ## API consistency
 
-UI flows depend on a REST API that supports the capabilities above.
+UI flows depend on the REST API in `spec/api-contract.md`.
 
-- `spec/api-contract.md` is **missing** in this repository.
-- This file therefore does **not** invent paths, methods, payloads, or status codes.
-- When `api-contract.md` is created, UI flows must stay consistent with it **and** with `requirements.md`. If those two conflict, report the conflict; do not silently pick one.
+- Paths, methods, payloads, and status codes must follow that contract.
+- If `api-contract.md` and `requirements.md` ever conflict, report the conflict; do not silently pick one.
 
 ## Explicitly out of scope for UI (not required)
 

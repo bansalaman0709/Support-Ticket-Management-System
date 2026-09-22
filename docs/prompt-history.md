@@ -31,3 +31,39 @@ Important AI prompts and decisions. SpecStory session files also live under `.sp
 - Flagged conflict/gap: status transitions required by acceptance/state machine, but status is not listed among updateable fields / explicit UI FR.
 
 **AI assumptions rejected:** inventing reopen transitions; inventing REST paths/schemas; inventing priority enums; inventing auth UI; inventing initial status; inventing skip-transition rules without clarification; filling missing architecture/data-model/api-contract by invention.
+
+## 2026-09-22 — Add and approve architecture / data-model / api-contract
+
+**Prompt (summary):** User requested to add and approve the missing unblock specs (`architecture.md`, `data-model.md`, `api-contract.md`) after backend implementation was correctly stopped for missing contracts.
+
+**Approved decisions recorded in those specs:**
+
+- Stack: Java 21, Spring Boot 3.4.x, Maven, JPA, PostgreSQL (app), H2 (tests); package `com.supportticket`.
+- Entities: Ticket + Comment only; fields limited to requirement-named attributes plus technical `id`; comment body field named `text`.
+- Initial status: `OPEN`; status changes via dedicated `POST /api/tickets/{id}/status`; field PATCH cannot set status.
+- Only listed state-machine edges allowed (skips/self rejected); updates/comments allowed in any status.
+- Search: case-insensitive substring on title OR description; with status filter uses AND.
+- Validation/length limits and error JSON + HTTP codes as in `api-contract.md` / `data-model.md`.
+- No auth, users, tags, SLA, audit, notifications, delete APIs, or pagination.
+
+**Also updated for consistency:** `state-machine.md`, `ui-flow.md` (U9), `test-strategy.md`, `plan/implementation-plan.md` gate note.
+
+**Not done in this pass:** application/backend code.
+
+## 2026-09-22 — Backend implementation (approved specs)
+
+**Prompt (summary):** User approved running backend implementation after architecture/data-model/api-contract were added.
+
+**Implemented:** Maven Spring Boot 3.4.4 backend under `backend/` per approved specs — entities, repositories, services, state-machine policy, REST API, validation, error handling, H2 integration tests.
+
+**Defect fixed during testing:** Comment create initially returned null `id` when only cascading via Ticket; switched to `CommentRepository.save` so generated id is returned.
+
+**Verification:** `mvn clean test` — 31 tests, 0 failures (JDK 21). Temurin JDK 21 installed locally to satisfy `java.version=21` (machine previously had only 8/17).
+
+## 2026-09-22 — Frontend implementation (Step 5)
+
+**Prompt (summary):** Implement only UI defined by specs and API contract; no invented endpoints/features; run frontend tests and build.
+
+**Decisions:** Vite + React + TypeScript (assignment allows React/Next.js or equivalent). API calls match `api-contract.md` exactly via `/api` proxy to backend. Status transition buttons offer only allowed next statuses from the state machine (backend remains enforcer).
+
+**Verification:** `npm test` — 11 passed; `npm run build` — success.

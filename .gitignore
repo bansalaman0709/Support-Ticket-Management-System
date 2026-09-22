@@ -1,0 +1,19 @@
+# Build
+backend/target/
+**/target/
+frontend/dist/
+**/node_modules/
+
+# IDE
+.idea/
+*.iml
+.vscode/
+
+# Secrets / local env
+.env
+.env.*
+!.env.example
+
+# OS
+.DS_Store
+Thumbs.db

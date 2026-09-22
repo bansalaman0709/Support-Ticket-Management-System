@@ -11,11 +11,13 @@
 
 **Rules for this plan:** Follow specifications exactly; do not invent requirements; keep tasks small and single-purpose; call out cross-layer dependencies; mark work that cannot proceed until an ambiguity is resolved.
 
-**Missing specs (block concrete design, not the existence of capability work):**
+**Approved specs (gates cleared for backend implementation):**
 
-- `spec/architecture.md` — absent
-- `spec/data-model.md` — absent
-- `spec/api-contract.md` — absent
+- `spec/architecture.md` — present (approved)
+- `spec/data-model.md` — present (approved)
+- `spec/api-contract.md` — present (approved)
+
+Earlier “missing spec” blockers below are superseded by those approved documents. Prefer the approved specs over historical “blocked” notes in individual tasks when they conflict.
 
 ---
 
